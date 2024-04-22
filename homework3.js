@@ -46,15 +46,30 @@ console.log("\ngetFullName")
 console.log(getFullName(person))
 
 
-const filterUniqueWords = text => text.toLowerCase()
-                                    .split(/\W+/)
-                                    .filter((word, index, array) => array.indexOf(word) === index)
-                                    .sort()
+function getWordsOfText(text) {
+    return text.toLowerCase().match(/[a-z]+/g);
+}
 
+function filterUniqueValues(values) {
+    return values.filter((word, index) => values.indexOf(word) === index)
+}
 
-const text = "hello world world"
+function sortAlphabetically(values) {
+    return values.sort();
+}
+
+function filterUniqueWords(text) {
+    if (typeof(text) != "string")
+        throw new Error("Invalid input type")
+    return sortAlphabetically(filterUniqueValues(getWordsOfText(text)))
+}
+
 console.log("\nfilterUniqueWords")
-console.log(filterUniqueWords(text))
+try {
+    console.log(filterUniqueWords("Hello hello world Hello !!!!"))
+} catch (error) {
+    console.log(error.message)
+}
 
 
 const students = [
