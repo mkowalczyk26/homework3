@@ -158,51 +158,55 @@ console.log(power(5, 2))
 function lazyMap(array, mappingFunction) {
     let i = 0
 
-    return function() {
-        if (i < array.length) {
-            const mappedValue = mappingFunction(array[i])
-            i++
-            return mappedValue;
-        } else {
-            return true
+    return {
+        next() {
+            if (i < array.length) {
+                const val = mappingFunction(array[i])
+                i++
+                return { done: false, value: val }
+            } else {
+                return { done: true }
+            }
         }
     }
 }
 
-const arr = [1, 2, 3];
+const arr = [1, 2, 3, 4]
+
+const map = lazyMap(arr, x => x + 1)
+
 console.log("\nlazyMap")
+while (true) {
+    const res = map.next()
+    if (res.done)
+        break
 
-const map = lazyMap(arr, x => x + 1);
-
-let val;
-while ((val = map()) !== true) {
-    console.log(val);
+    console.log(res.value)
 }
 
 
-function fibbonacciGenerator(){
-    let prev = 0
-    let curr = 1
 
-    return function() {
-        const f = curr
-        const next = prev + curr
+function fibonacciGenerator() {
+    let x = 0
+    let y = 1
 
-        prev = curr
-        curr = next
-
-        return f
+    return {
+        next() {
+            const result = { done: false, value: x }
+            next = x + y
+            x = y
+            y = next
+            return result
+        }
     }
 }
 
-const fib = fibbonacciGenerator()
+const fib = fibonacciGenerator()
 
-console.log("\nfibbonaciGenerator")
-
-for(let i = 0; i < 5; i++){
-    const f = fib()
-    console.log(f)
-}
-
-
+console.log("\nfibonacciGenerator")
+console.log(fib.next().value)
+console.log(fib.next().value)
+console.log(fib.next().value)
+console.log(fib.next().value)
+console.log(fib.next().value)
 
